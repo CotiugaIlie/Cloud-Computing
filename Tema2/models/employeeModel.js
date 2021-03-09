@@ -2,14 +2,13 @@ const config = require('../config/config');
 const mysql = require('mysql');
 const { v4: uuidv4 } = require('uuid')
 
-const { writeDataToFile } = require('../utils')
 
 
 function findAll() {
     return new Promise((resolve, reject) => {
         const db = mysql.createConnection(config);
         let sql = 'SELECT * FROM cc2';
-        let query = db.query(sql, (err, results) => {
+        db.query(sql, (err, results) => {
             if(err) throw err;
             resolve(results)
         });
@@ -20,7 +19,7 @@ function findById(id) {
     return new Promise((resolve, reject) => {
         const db = mysql.createConnection(config);
         let sql = `SELECT * FROM cc2 WHERE id = ${id}`;
-        let query = db.query(sql, (err, results) => {
+        db.query(sql, (err, results) => {
             if(err) throw err;
             resolve(results)
         });
@@ -30,10 +29,10 @@ function findById(id) {
 
 function create(employee) {
     return new Promise((resolve, reject) => {
-        const newProduct = {id: uuidv4(), ...employee}
+        const newEmployee = {...employee}
         const db = mysql.createConnection(config);
         let sql = `insert into cc2 SET ?`;
-        db.query(sql, newProduct, (err, results) => {
+        db.query(sql, newEmployee, (err, results) => {
             if(err) throw err;
             resolve(results)
         });
@@ -63,6 +62,9 @@ function remove(id) {
         resolve()
     })
 }
+
+
+
 
 module.exports = {
     findAll,
